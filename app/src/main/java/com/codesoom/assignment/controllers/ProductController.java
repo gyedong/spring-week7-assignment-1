@@ -9,10 +9,13 @@ import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -40,16 +43,17 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("isAuthenticated()")
     public Product create(
-            @RequestAttribute Long userId,
-            @RequestBody @Valid ProductData productData
+            @RequestBody @Valid ProductData productData,
+            Authentication authentication
     ) {
         return productService.createProduct(productData);
     }
 
     @PatchMapping("{id}")
+    @PreAuthorize("isAuthenticated()")
     public Product update(
-            @RequestAttribute Long userId,
             @PathVariable Long id,
             @RequestBody @Valid ProductData productData
     ) {
@@ -57,9 +61,9 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(
-            @RequestAttribute Long userId,
             @PathVariable Long id
     ) {
         productService.deleteProduct(id);

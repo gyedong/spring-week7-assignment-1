@@ -33,16 +33,16 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("User's email address is already existed");
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(UserForbiddenException.class)
+    public ErrorResponse handleUserForbiddenException() {
+        return new ErrorResponse("You don't have to permission.");
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(LoginFailException.class)
     public ErrorResponse handleLoginFailException() {
         return new ErrorResponse("Log-in failed");
-    }
-
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(InvalidTokenException.class)
-    public ErrorResponse handleInvalidAccessTokenException() {
-        return new ErrorResponse("Invalid access token");
     }
 
     @ResponseBody
